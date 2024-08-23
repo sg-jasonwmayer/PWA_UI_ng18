@@ -1,18 +1,25 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { SwUpdate, SwPush } from '@angular/service-worker';
+import { SwUpdate } from '@angular/service-worker';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from '@ngrx/store';
+//import { AppConfigService } from './_services/appconfig/appconfig.service';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [],
   imports: [
+    
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    StoreModule.forRoot({}, {})
   ],
-  providers: [swUpdate],
+  providers: [
+    SwUpdate,
+   // AppConfigService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

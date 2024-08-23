@@ -1,25 +1,23 @@
-import {
-  getSupportedInputTypes,
-  Platform,
-  supportsPassiveEventListeners,
-  supportsScrollBehavior
-} from '@angular/cdk/platform';
+
 import { Title } from '@angular/platform-browser';
 import { Component, OnInit } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
+
 import { SwUpdate, SwPush } from '@angular/service-worker';
 import * as LogRocket from 'logrocket';
-import { configure } from 'scandit-sdk';
+ import { configure } from 'scandit-sdk';
 import { filter, map } from 'rxjs/operators';
-import { environment } from './../environments/environment';
-import { fadeAnimation, fadeIn, fadeOut } from './animations/animations';
-import { AppConfigService } from './appconfig/appconfig.service';
-//import { UpdateAppComponent } from './update-app/update-app.component';
+import {
+  MatBottomSheet,
+  MatBottomSheetModule,
+  MatBottomSheetRef,
+} from '@angular/material/bottom-sheet';
+// import { fadeAnimation, fadeIn, fadeOut } from './animations/animations';
+// import { AppConfigService } from './appconfig/appconfig.service';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { resetProcesses } from './store/claim';
-import { ManifestService } from './_services/manifest/manifest.service';
+import { environment } from './environments/environment';
 import { remoteServersHostnames } from './_services/remote-server-hostnames';
+import { ManifestService } from './_services/manifest/manifest.service';
 
 // Initialize LogRocket with your app ID
 LogRocket.init('om4bhr/pwa-etfq2');
@@ -28,12 +26,9 @@ LogRocket.init('om4bhr/pwa-etfq2');
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  animations: [fadeOut, fadeIn, fadeAnimation]
+  //animations: [fadeOut, fadeIn, fadeAnimation]
 })
 export class AppComponent implements OnInit {
-  custom_font_normal = this.appConfig.cmsData.custom_font_normal;
-  custom_font_bold = this.appConfig.cmsData.custom_font_bold;
-  custom_font_light = this.appConfig.cmsData.custom_font_light;
   title = 'Claims Portal';
   root = document.documentElement;
   applicationVersion = environment.appVersion;
@@ -46,20 +41,18 @@ export class AppComponent implements OnInit {
   fullscreen: any;
   dealerCode!: string;
   isSso = localStorage.getItem('isSso');
-  supportedInputTypes = Array.from(getSupportedInputTypes()).join(', ');
-  supportsPassiveEventListeners = supportsPassiveEventListeners();
-  supportsScrollBehavior = supportsScrollBehavior();
+
 
   constructor(
-    // private appConfig: AppConfigService,
+    private appConfig: AppConfigService,
     private swUpdate: SwUpdate,
-    // private bottomsheet: MatBottomSheet,
-    // private titleService: Title,
-    // private router: Router,
-    // private activatedRoute: ActivatedRoute,
-    // public platform: Platform,
-    // private store: Store,
-    // private manifestService: ManifestService
+    private bottomsheet: MatBottomSheet,
+    private titleService: Title,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    public platform: Platform,
+    private store: Store,
+    private manifestService: ManifestService
   ) {
     
     //this.manifestService.getManifest(window.location.host);
@@ -151,11 +144,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.isPageLoading = false;
-    if (this.platform.ANDROID || this.platform.IOS) {
-      localStorage.setItem('deviceType', 'Mobile');
-    } else {
-      localStorage.setItem('deviceType', 'Desktop');
-    }
+
     const appTitle = this.titleService.getTitle();
     this.router.events
       .pipe(
@@ -173,7 +162,7 @@ export class AppComponent implements OnInit {
       });
   }
   private _getProtectionRemoteServersHostnames() {
-    return remoteServersHostnames.filter(hostname => hostname.includes('protection-claims'));
+    return remoteServersHostnames.filter((hostname: string | string[]) => hostname.includes('protection-claims'));
   }
   private _getProdRemoteServersHostnames() {
     return remoteServersHostnames.filter(hostname => hostname.includes('prod'));
