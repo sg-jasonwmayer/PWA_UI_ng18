@@ -65,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "PWA-UI-Platform_18:build:production"
+              "buildTarget": "PWA-UI-Platform_18:build:production"
             },
             "development": {
-              "browserTarget": "PWA-UI-Platform_18:build:development"
+              "buildTarget": "PWA-UI-Platform_18:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,7 +76,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "PWA-UI-Platform_18:build"
+            "buildTarget": "PWA-UI-Platform_18:build"
           }
         },
         "test": {
